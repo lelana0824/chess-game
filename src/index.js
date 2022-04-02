@@ -166,22 +166,21 @@ canvas.addEventListener('click', (e) => {
                 selected = null;
                 return
             }
+            diedPieces.push(clickedBlock[1]);
+
             clickedBlock[1] = selected[1]
             selected[1] = null
             selected = null;
             makeChessBoard(boardWithPieces)
 
             return;
-            // 아니라면 이전에 선택한 말을 해당 위치로 옮긴다.
-            // 삭제된 말은 따로 죽은 리스트에 넣어둔다.
         }
-
         selected = clickedBlock
     } else {
         if (!clickedBlock[1]) {
             return;
         }
-        
+
         // 말을 선택한 뒤 블록을 선택 경우
         clickedBlock[1] = selected[1]
         selected[1] = null
