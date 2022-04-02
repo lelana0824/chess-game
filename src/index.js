@@ -16,6 +16,7 @@ canvas.height = height * dpr;
 
 // 체스판 그리기
 const boardWithPieces = []
+const diedPieces = [];
 
 function makeChessBoard(matrix) {
     if (!matrix.length) {
@@ -158,9 +159,30 @@ canvas.addEventListener('click', (e) => {
 
     if (clickedBlock[1]) {
         // 말을 선택한 경우
+        if (selected) {
+            // 이전에 선택한 말이 존재할 경우
+            if (selected[1].team === clickedBlock[1].team) {
+                // 이전과 지금 선택한 말이 같은 진영일 경우 그냥 리턴
+                selected = null;
+                return
+            }
+            clickedBlock[1] = selected[1]
+            selected[1] = null
+            selected = null;
+            makeChessBoard(boardWithPieces)
+
+            return;
+            // 아니라면 이전에 선택한 말을 해당 위치로 옮긴다.
+            // 삭제된 말은 따로 죽은 리스트에 넣어둔다.
+        }
+
         selected = clickedBlock
     } else {
-        // 블록을 선택 경우
+        if (!clickedBlock[1]) {
+            return;
+        }
+        
+        // 말을 선택한 뒤 블록을 선택 경우
         clickedBlock[1] = selected[1]
         selected[1] = null
         selected = null;
