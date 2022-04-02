@@ -3,7 +3,8 @@
     padding: 0;
 }
 
-canvas {
+#chess {
+    width: 800px;
+    height: 800px;
     margin: 20px;
-    width: 100%;
 }
