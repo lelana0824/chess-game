@@ -177,10 +177,10 @@ canvas.addEventListener('click', (e) => {
         }
         selected = clickedBlock
     } else {
-        if (!clickedBlock[1]) {
+        if (!selected && !clickedBlock[1]) {
             return;
         }
-
+    
         // 말을 선택한 뒤 블록을 선택 경우
         clickedBlock[1] = selected[1]
         selected[1] = null
