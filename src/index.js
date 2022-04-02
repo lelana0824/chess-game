@@ -30,19 +30,13 @@ function makeChessBoard(matrix) {
                     piece = {
                         name: 'PAWN',
                         team: 'BLACK',
-                        position: [
-                            [1000, 200, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [1000, 200, 200, 200],
                     }
                 } else if (i === 6) {
                     piece = {
                         name: 'PAWN',
                         team: 'WHITE',
-                        position: [
-                            [1000, 0, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [1000, 0, 200, 200],
                     }
 
                 // 양쪽 룩 그리기
@@ -50,19 +44,13 @@ function makeChessBoard(matrix) {
                     piece = {
                         name: 'ROOK',
                         team: 'BLACK',
-                        position: [
-                            [800, 200, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [800, 200, 200, 200],
                     }
                 } else if (i === 7 && (j === 0 || j === 7)) {
                     piece = {
                         name: 'ROOK',
                         team: 'WHITE',
-                        position: [
-                            [800, 0, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [800, 0, 200, 200],
                     }
                 
                 // 양쪽 나이트 그리기
@@ -70,19 +58,13 @@ function makeChessBoard(matrix) {
                     piece = {
                         name: 'KNIGHT',
                         team: 'BLACK',
-                        position: [
-                            [600, 200, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [600, 200, 200, 200],
                     }
                 } else if (i === 7 && (j === 1 || j === 6)) {
                     piece = {
                         name: 'KNIGHT',
                         team: 'WHITE',
-                        position: [
-                            [600, 0, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [600, 0, 200, 200],
                     }
 
                 // 양쪽 비숍 그리기
@@ -90,55 +72,37 @@ function makeChessBoard(matrix) {
                     piece = {
                         name: 'BISHOP',
                         team: 'BLACK',
-                        position: [
-                            [400, 200, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [400, 200, 200, 200],
                     }
                 } else if (i === 7 && (j === 2 || j === 5)) {
                     piece = {
                         name: 'BISHOP',
                         team: 'WHITE',
-                        position: [
-                            [400, 0, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [400, 0, 200, 200],
                     }
                 } else if (i === 0 && j === 3) {
                     piece = {
                         name: 'QUEEN',
                         team: 'BLACK',
-                        position: [
-                            [0, 200, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [0, 200, 200, 200],
                     }
                 } else if (i === 7 && j === 3) {
                     piece = {
                         name: 'KING',
                         team: 'WHITE',
-                        position: [
-                            [200, 0, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [200, 0, 200, 200],
                     }
                 } else if (i === 0 && j === 4) {
                     piece = {
                         name: 'KING',
                         team: 'BLACK',
-                        position: [
-                            [200, 200, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [200, 200, 200, 200],
                     }
                 } else if (i === 7 && j === 4) {
                     piece = {
                         name: 'QUEEN',
                         team: 'WHITE',
-                        position: [
-                            [0, 0, 200, 200],
-                            [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize]
-                        ]
+                        position: [0, 0, 200, 200],
                     }
                 }
 
@@ -152,18 +116,16 @@ function makeChessBoard(matrix) {
         }
     }
 
-    console.log(matrix);
-
     const piecesImage = document.getElementById('chess-pieces');
 
     matrix.forEach(block => {
-        ctx.fillStyle = block[0].pop();
+        ctx.fillStyle = block[0][4]
         ctx.fillRect(...(block[0]));
 
         if (block[1]) {
             ctx.drawImage(
                 piecesImage,
-                ...[...block[1]['position'][0], ...block[1]['position'][1]]
+                ...[...block[1]['position'], ...(block[0])]
             )
         }
     })
@@ -171,30 +133,37 @@ function makeChessBoard(matrix) {
 
 makeChessBoard(boardWithPieces)
 
+let selected = null;
 
-canvas.addEventListener('mousemove', (e) => {
+canvas.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // const mouseX = parseInt(e.clientX - offsetX);
-    // const mouseY = parseInt(e.clientY - offsetY);
+    const mouseX = parseInt(e.clientX - offsetX);
+    const mouseY = parseInt(e.clientY - offsetY);
 
-    // const dx = mouseX * dpr
-    // const dy = mouseY * dpr
-    // const isInside = dx * dx + dy * dy <= chessBlockSize * chessBlockSize;
+    const dx = mouseX * dpr
+    const dy = mouseY * dpr
 
-    // const position = [chessBlockSize * 0, chessBlockSize * 0, chessBlockSize, chessBlockSize]
-    // let filled = false;
+    ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+    ctx.fillRect(dx, dy, 10, 10);
 
-    // if (isInside) {
-    //     if (!filled) {
-    //         ctx.fillStyle = 'rgba(255, 0, 0, 0.1)';
-    //         // ctx.fillRect(...position);
-    //         console.log(mouseX * mouseX + mouseY * mouseY, chessBlockSize * chessBlockSize)
-    //         filled = true
-    //     }
-    // } else {
-    //     filled = false;
-    //     // ctx.clearRect(...position)
-    // }
+    const clickedBlock = boardWithPieces.find((block) => {
+        const blockPosition = block[0];
+
+        if ((dx < blockPosition[0] + chessBlockSize) && (dy < blockPosition[1] + chessBlockSize)) {
+            return block
+        }
+    })
+
+    if (clickedBlock[1]) {
+        // 말을 선택한 경우
+        selected = clickedBlock
+    } else {
+        // 블록을 선택 경우
+        clickedBlock[1] = selected[1]
+        selected[1] = null
+        selected = null;
+        makeChessBoard(boardWithPieces)
+    }
 })
