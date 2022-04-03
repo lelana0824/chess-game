@@ -86,9 +86,9 @@ function makeChessBoard(matrix) {
                     }
                 } else if (i === 0 && j === 3) {
                     piece = {
-                        name: 'QUEEN',
+                        name: 'KING',
                         team: 'BLACK',
-                        position: [0, 200, 200, 200],
+                        position: [200, 200, 200, 200],
                     }
                 } else if (i === 7 && j === 3) {
                     piece = {
@@ -98,9 +98,9 @@ function makeChessBoard(matrix) {
                     }
                 } else if (i === 0 && j === 4) {
                     piece = {
-                        name: 'KING',
+                        name: 'QUEEN',
                         team: 'BLACK',
-                        position: [200, 200, 200, 200],
+                        position: [0, 200, 200, 200],
                     }
                 } else if (i === 7 && j === 4) {
                     piece = {
@@ -181,7 +181,7 @@ canvas.addEventListener('click', (e) => {
                     }
                     return position + 10
                 })))
-                
+
                 if (selected[1] === clickedBlock[1]) {
                     // 같은 말을 한번 더 클릭한 경우라면 선택 취소하고 리턴
                     selected = null;
