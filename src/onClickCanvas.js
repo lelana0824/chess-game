@@ -58,7 +58,7 @@ const onClickCanvas = (e) => {
             clickedBlock[1] = selected[1];
             selected[1] = null;
             selected = null;
-            makeChessBoard(boardWithPieces);
+            drawChessBoard(boardWithPieces);
 
             return;
         }
@@ -73,6 +73,6 @@ const onClickCanvas = (e) => {
         clickedBlock[1] = selected[1];
         selected[1] = null;
         selected = null;
-        makeChessBoard(boardWithPieces);
+        drawChessBoard(boardWithPieces);
     }
 };

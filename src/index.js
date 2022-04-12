@@ -19,6 +19,6 @@ const clickSound = new Audio('../static/click-sound.mp3');
 
 // 체스판 그리기
 const boardWithPieces = []
-makeChessBoard(boardWithPieces)
+drawChessBoard(boardWithPieces)
 
 canvas.addEventListener('click', onClickCanvas)
