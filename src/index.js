@@ -205,6 +205,7 @@ canvas.addEventListener('click', (e) => {
         if (!selected && !clickedBlock[1]) {
             return;
         }
+        clickSound.play();
     
         // 말을 선택한 뒤 블록을 선택 경우
         clickedBlock[1] = selected[1]
