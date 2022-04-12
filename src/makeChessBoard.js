@@ -1,27 +1,26 @@
 const WHITE_CHESS_PIECE_COLOR = '#fece9e';
 const BLACK_CHESS_PIECE_COLOR = '#d18a48';
+const piecesImage = document.getElementById('chess-pieces');
 
-function drawChessBoard(matrix) {
-    if (!matrix.length) {
-        initChessBoard(matrix);
+function drawChessBoard(board) {
+    if (!board.length) {
+        initChessBoard(board);
     }
 
-    const piecesImage = document.getElementById('chess-pieces');
+    board.forEach(square => {
+        ctx.fillStyle = square[0][4];
+        ctx.fillRect(...(square[0]));
 
-    matrix.forEach(block => {
-        ctx.fillStyle = block[0][4];
-        ctx.fillRect(...(block[0]));
-
-        if (block[1]) {
+        if (square[1]) {
             ctx.drawImage(
                 piecesImage,
-                ...[...block[1]['position'], ...(block[0])]
+                ...[...square[1]['position'], ...(square[0])]
             );
         }
     });
 }
 
-function initChessBoard(matrix) {
+function initChessBoard(board) {
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
             const color = ((i + j) % 2 === 0) ? WHITE_CHESS_PIECE_COLOR : BLACK_CHESS_PIECE_COLOR;
@@ -109,8 +108,21 @@ function initChessBoard(matrix) {
                 };
             }
 
-
-            matrix.push([
+            // TODO: 아래의 data 형태로 변경 필요
+            /**
+            {
+                square: {
+                    position: [],
+                    color: 'color'
+                },
+                piece?: {
+                    name: '',
+                    team: '',
+                    position: [],
+                }
+            }
+             */
+            board.push([
                 [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize, color],
                 piece
             ]);
