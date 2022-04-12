@@ -1,3 +1,6 @@
+const diedPieces = [];
+let selected = null;
+
 const onClickCanvas = (e) => {
     e.preventDefault();
     e.stopPropagation();
