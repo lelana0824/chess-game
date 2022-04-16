@@ -36,7 +36,7 @@ const onClickCanvas = (e) => {
             // 이전에 선택한 말이 존재할 경우
             if (selected.piece.team === clickedBlock.piece.team) {
                 // 이전과 지금 선택한 말이 같은 진영일 경우 그냥 리턴
-                ctx.strokeStyle = selected.square.position[selected.square.position.length - 1];
+                ctx.strokeStyle = selected.square.color;
                 ctx.strokeRect(...(selected.square.position.map((position, index) => {
                     if (index === 2 || index === 3) {
                         return position - 20;
@@ -47,6 +47,7 @@ const onClickCanvas = (e) => {
                 if (selected.piece === clickedBlock.piece) {
                     // 같은 말을 한번 더 클릭한 경우라면 선택 취소하고 리턴
                     selected = null;
+                    drawChessBoard(boardWithPieces);
                     return;
                 }
 
