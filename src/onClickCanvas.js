@@ -22,20 +22,27 @@ const onClickCanvas = (e) => {
     if (clickedBlock.piece) {
         // 말을 선택한 경우
         clickSound.play();
+        drawSelectedLine(clickedBlock);
 
-        ctx.strokeStyle = '#bfff00';
-        ctx.lineWidth = 10;
-        ctx.strokeRect(...(clickedBlock.square.position.map((position, index) => {
-            if (index === 2 || index === 3) {
-                return position - 20;
-            }
-            return position + 10;
-        })));
+        // 행마가 가능한 모든곳의 square 색을 변경한다.
+        // ctx.fillStyle = "rgba(128,255,255,0.5)"
+        
+        // const anotherSquares = boardWithPieces.filter((block) => {
+        //     const blockPosition = block;
+    
+        //     if (clickedBlock !== blockPosition) return true;
+        //     return false;
+        // });
+
+        // anotherSquares.forEach(square => {
+        //     ctx.fillRect(...square.square.position);
+        // })
 
         if (selected) {
             // 이전에 선택한 말이 존재할 경우
+
+            // 이전과 지금 선택한 말이 같은 진영일 경우
             if (selected.piece.team === clickedBlock.piece.team) {
-                // 이전과 지금 선택한 말이 같은 진영일 경우 그냥 리턴
                 ctx.strokeStyle = selected.square.color;
                 ctx.strokeRect(...(selected.square.position.map((position, index) => {
                     if (index === 2 || index === 3) {
@@ -45,13 +52,15 @@ const onClickCanvas = (e) => {
                 })));
 
                 if (selected.piece === clickedBlock.piece) {
-                    // 같은 말을 한번 더 클릭한 경우라면 선택 취소하고 리턴
+                    // 같은 말을 한번 더 클릭한 경우라면 선택 취소
                     selected = null;
                     drawChessBoard(boardWithPieces);
                     return;
                 }
 
                 selected = clickedBlock;
+                drawChessBoard(boardWithPieces);
+                drawSelectedLine(selected)
                 return;
             }
             diedPieces.push(clickedBlock.piece);
@@ -77,3 +86,15 @@ const onClickCanvas = (e) => {
         drawChessBoard(boardWithPieces);
     }
 };
+function drawSelectedLine(clickedBlock) {
+    console.log(clickedBlock)
+    ctx.strokeStyle = '#bfff00';
+    ctx.lineWidth = 10;
+    ctx.strokeRect(...(clickedBlock.square.position.map((position, index) => {
+        if (index === 2 || index === 3) {
+            return position - 20;
+        }
+        return position + 10;
+    })));
+}
+
