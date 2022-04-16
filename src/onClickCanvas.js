@@ -24,19 +24,21 @@ const onClickCanvas = (e) => {
         clickSound.play();
         drawSelectedLine(clickedBlock);
 
-        // 행마가 가능한 모든곳의 square 색을 변경한다.
-        // ctx.fillStyle = "rgba(128,255,255,0.5)"
-        
-        // const anotherSquares = boardWithPieces.filter((block) => {
-        //     const blockPosition = block;
-    
-        //     if (clickedBlock !== blockPosition) return true;
-        //     return false;
-        // });
+        const movableSquares = checkMovablePosition(clickedBlock, boardWithPieces);
 
-        // anotherSquares.forEach(square => {
-        //     ctx.fillRect(...square.square.position);
-        // })
+        // 행마가 가능한 모든곳의 square 색을 변경한다.
+        ctx.fillStyle = "rgba(128,255,255,0.5)"
+        
+        const anotherSquares = movableSquares.filter((block) => {
+            const blockPosition = block;
+    
+            if (clickedBlock !== blockPosition) return true;
+            return false;
+        });
+
+        anotherSquares.forEach(square => {
+            ctx.fillRect(...square.square.position);
+        })
 
         if (selected) {
             // 이전에 선택한 말이 존재할 경우
@@ -63,6 +65,13 @@ const onClickCanvas = (e) => {
                 drawSelectedLine(selected)
                 return;
             }
+            // 먹을수 없는 말을 선택한 경우
+            const movableSquares = checkMovablePosition(selected, boardWithPieces);
+            if (!movableSquares.some(square => square === clickedBlock)) {
+                alert("이동할 수 없는 칸입니다.")
+                return;
+            }
+
             diedPieces.push(clickedBlock.piece);
 
             clickedBlock.piece = selected.piece;
@@ -80,14 +89,24 @@ const onClickCanvas = (e) => {
         clickSound.play();
 
         // 말을 선택한 뒤 블록을 선택 경우
+        const movableSquares = checkMovablePosition(selected, boardWithPieces);
+        console.log(movableSquares)
+
+        // 이동할 수 없는 블록을 선택한 경우
+        if (!movableSquares.some(square => square === clickedBlock)) {
+            alert("이동할 수 없는 칸입니다.")
+            return;
+        }
+        // 비어있는 칸일 경우
+        selected.piece.moveHistory.push(selected.square.position);
         clickedBlock.piece = selected.piece;
         selected.piece = null;
         selected = null;
         drawChessBoard(boardWithPieces);
     }
 };
+
 function drawSelectedLine(clickedBlock) {
-    console.log(clickedBlock)
     ctx.strokeStyle = '#bfff00';
     ctx.lineWidth = 10;
     ctx.strokeRect(...(clickedBlock.square.position.map((position, index) => {
@@ -98,3 +117,46 @@ function drawSelectedLine(clickedBlock) {
     })));
 }
 
+function checkMovablePosition(clickedPiece, board) {
+    if (!clickedPiece.piece) return;
+
+    let newBoard = board;
+    const selectedIndex = newBoard.findIndex(square => square === clickedPiece)
+
+    if (clickedPiece.piece.name === 'PAWN') {
+        const movableIndex = clickedPiece.piece.team === 'WHITE' ? -8 : 8
+        const pawnMovable대각선Index = clickedPiece.piece.team === 'WHITE' ? -7 : 7
+        const pawnMovable대각선Index2 = clickedPiece.piece.team === 'WHITE' ? -9 : 9
+
+        if (!clickedPiece.piece.moveHistory.length) {
+            newBoard = newBoard.filter((square, index) => {
+                if (index === selectedIndex + movableIndex || index === selectedIndex + movableIndex * 2) {
+                    if (!square.piece) {
+                        return square
+                    }
+                }
+                if (clickedPiece.piece?.team !== square.piece?.team && (index === selectedIndex + pawnMovable대각선Index || index === selectedIndex + pawnMovable대각선Index2)) {
+                    if (square.piece) {
+                        return square
+                    }
+                }
+            })
+        } else {
+            newBoard = newBoard.filter((square, index) => {
+                if (index === selectedIndex + movableIndex) {
+                    if (!square.piece) {
+                        return square
+                    }
+                }
+                if (clickedPiece.piece?.team !== square.piece?.team && (index === selectedIndex + pawnMovable대각선Index || index === selectedIndex + pawnMovable대각선Index2)) {
+                    if (square.piece) {
+                        return square
+                    }
+                }
+            })
+        }
+    }
+
+    // 만약 해당 기물이 킹이고, 이동할 수 있는 공간이 없으면 체크 메이트로, 게임은 끝나게 된다.
+    return newBoard
+}
