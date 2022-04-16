@@ -8,13 +8,13 @@ function drawChessBoard(board) {
     }
 
     board.forEach(square => {
-        ctx.fillStyle = square[0][4];
-        ctx.fillRect(...(square[0]));
+        ctx.fillStyle = square.square.color;
+        ctx.fillRect(...square.square.position);
 
-        if (square[1]) {
+        if (square.piece) {
             ctx.drawImage(
                 piecesImage,
-                ...[...square[1]['position'], ...(square[0])]
+                ...[...square.piece.position, ...square.square.position]
             );
         }
     });
@@ -108,24 +108,14 @@ function initChessBoard(board) {
                 };
             }
 
-            // TODO: 아래의 data 형태로 변경 필요
-            /**
-            {
-                square: {
-                    position: [],
-                    color: 'color'
+            const square = new Square(
+                {
+                    position: [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize],
+                    color,
                 },
-                piece?: {
-                    name: '',
-                    team: '',
-                    position: [],
-                }
-            }
-             */
-            board.push([
-                [chessBlockSize * j, chessBlockSize * i, chessBlockSize, chessBlockSize, color],
                 piece
-            ]);
+            )
+            board.push(square);
         }
     }
 }
